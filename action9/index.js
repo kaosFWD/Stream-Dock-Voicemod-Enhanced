@@ -71,6 +71,12 @@ $SD.on('sendToPropertyInspector', e => {
                     voiceHtml += `<option value="${sound.id}">${sound.name}</option>`;
                 });
                 selectVoice.innerHTML = voiceHtml;
+                
+                // *** NUOVO: Ripristina la selezione audio salvata ***
+                if (settings.selectedSound) {
+                    selectVoice.value = settings.selectedSound;
+                    console.log('Audio ripristinato:', settings.selectedSound);
+                }
             } else {
                 selectVoice.innerHTML = `<option value="">${$localizedStrings['请选择音频'] || 'Seleziona un audio'}</option>`;
             }
@@ -257,8 +263,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         voiceHtml += `<option value="${sound.id}">${sound.name}</option>`;
                     });
                     selectVoice.innerHTML = voiceHtml;
+                    
+                    // *** NUOVO: Ripristina la selezione se esiste e appartiene a questa soundboard ***
+                    if (settings.selectedSound && selectedBoard.sounds.find(s => s.id === settings.selectedSound)) {
+                        selectVoice.value = settings.selectedSound;
+                    } else {
+                        // Se l'audio precedente non appartiene più a questa soundboard, resetta
+                        settings.selectedSound = '';
+                    }
                 } else {
                     selectVoice.innerHTML = `<option value="">${$localizedStrings['请选择音频'] || 'Seleziona un audio'}</option>`;
+                    settings.selectedSound = ''; // Reset se non ci sono suoni
                 }
             }
             

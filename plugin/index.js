@@ -550,10 +550,15 @@ let actionArr = [
             }
         },
         
-        didReceiveSettings(data) {
-            console.log('didReceiveSettings per soundboard:', data.payload.settings);
-            // Aggiorna il context_pool con tutte le impostazioni
-            this.context_pool[data.context] = { ...data.payload.settings };
+didReceiveSettings(data) {
+    console.log('didReceiveSettings per soundboard:', data.payload.settings);
+    // Aggiorna il context_pool con tutte le impostazioni, mantenendo selectedSound
+    this.context_pool[data.context] = { 
+        ...this.context_pool[data.context], 
+        ...data.payload.settings 
+    };
+    
+    console.log('Context pool aggiornato:', this.context_pool[data.context]);
             
             if (data.payload.settings.active) {
                 // Se online, richiedi bitmap
@@ -594,6 +599,7 @@ let actionArr = [
                         voiceStatus,
                         usableBoards: this.usableBoards,
                         active: this.context_pool[key].active || '',
+                        selectedSound: this.context_pool[key].selectedSound || '', // *** NUOVO: Mantieni selectedSound ***
                         usingCache: false // Non stiamo usando la cache
                     });
                     
