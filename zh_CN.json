@@ -1,0 +1,63 @@
+{
+  "Name": "Voicemod",
+  "Description": "语音模组控制",
+  "Category": "Voicemod",
+  "com.hotspot.streamdock.voicemod.action1": {
+    "Name": "变声器选项",
+    "Tooltip": "更改变声器声音类型"
+  },
+  "com.hotspot.streamdock.voicemod.action2": {
+    "Name": "随机语音",
+    "Tooltip": "随机选择一个声音"
+  },
+  "com.hotspot.streamdock.voicemod.action3": {
+    "Name": "语音转换器开/关",
+    "Tooltip": "点击打开或者关闭语音转换器"
+  },
+  "com.hotspot.streamdock.voicemod.action4": {
+    "Name": "听见自己的声音开/关",
+    "Tooltip": "点击打开或者关闭听见自己的声音"
+  },
+  "com.hotspot.streamdock.voicemod.action5": {
+    "Name": "背景效果开/关",
+    "Tooltip": "点击打开或者关闭背景效果"
+  },
+  "com.hotspot.streamdock.voicemod.action6": {
+    "Name": "静音开/关",
+    "Tooltip": "点击打开或者关闭静音"
+  },
+  "com.hotspot.streamdock.voicemod.action7": {
+    "Name": "即时哔哔声",
+    "Tooltip": "按下按键重现麦克风检查器哔哔声"
+  },
+  "com.hotspot.streamdock.voicemod.action8": {
+    "Name": "推送到语音转换器",
+    "Tooltip": "按住按键开启语音转换器，松开关闭"
+  },
+  "com.hotspot.streamdock.voicemod.action9": {
+    "Name": "音板播放",
+    "Tooltip": "此操作播放soundboard的音频文件"
+  },
+  "com.hotspot.streamdock.voicemod.action10": {
+    "Name": "停止所有模因播放",
+    "Tooltip": "此操作将暂停所有正在播放的模因"
+  },
+  "com.hotspot.streamdock.voicemod.action11": {
+    "Name": "为我静音开/关",
+    "Tooltip": "此操作将切换为我静音按钮状态"
+  },
+  "Localization": {
+    "选项": "选项",
+    "音频选择": "音频选择",
+    "请选择音频": "请选择音频",
+    "插件状态": "插件状态",
+    "正在连接 Voicemod": "正在连接 Voicemod",
+    "连接成功 - 正在运行": "连接成功 - 正在运行",
+    "连接失败，正在尝试重连...": "连接失败，正在尝试重连...",
+    "随机语音": "随机语音",
+    "点击切换": "点击切换",
+    "操作按钮": "操作按钮",
+    "音板选择": "音板选择",
+    "请选择音板": "请选择音板"
+  }
+}

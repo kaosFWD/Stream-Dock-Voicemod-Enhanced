@@ -1,0 +1,67 @@
+{
+  "Name": "Voicemod",
+  "Description": "Plugin di controllo per Voicemod",
+  "Category": "Voicemod",
+  "com.hotspot.streamdock.voicemod.action1": {
+    "Name": "Selezione Voce",
+    "Tooltip": "Seleziona il tipo di voce del modificatore vocale"
+  },
+  "com.hotspot.streamdock.voicemod.action2": {
+    "Name": "Voce Casuale",
+    "Tooltip": "Seleziona una voce a caso"
+  },
+  "com.hotspot.streamdock.voicemod.action3": {
+    "Name": "Modificatore Vocale On/Off",
+    "Tooltip": "Attiva o disattiva il modificatore vocale"
+  },
+  "com.hotspot.streamdock.voicemod.action4": {
+    "Name": "Senti la Tua Voce On/Off",
+    "Tooltip": "Attiva o disattiva l'ascolto della propria voce"
+  },
+  "com.hotspot.streamdock.voicemod.action5": {
+    "Name": "Effetti Ambientali On/Off",
+    "Tooltip": "Attiva o disattiva gli effetti sonori ambientali"
+  },
+  "com.hotspot.streamdock.voicemod.action6": {
+    "Name": "Silenzia On/Off",
+    "Tooltip": "Attiva o disattiva la modalità silenziosa"
+  },
+  "com.hotspot.streamdock.voicemod.action7": {
+    "Name": "Bip Istantaneo",
+    "Tooltip": "Premi per riprodurre il suono di censura del microfono"
+  },
+  "com.hotspot.streamdock.voicemod.action8": {
+    "Name": "Push-to-Talk Modificatore",
+    "Tooltip": "Tieni premuto per attivare il modificatore vocale, rilascia per disattivarlo"
+  },
+  "com.hotspot.streamdock.voicemod.action9": {
+    "Name": "Riproduci Soundboard",
+    "Tooltip": "Riproduce i file audio della soundboard"
+  },
+  "com.hotspot.streamdock.voicemod.action10": {
+    "Name": "Ferma Tutti i Suoni",
+    "Tooltip": "Interrompe la riproduzione di tutti i suoni e meme"
+  },
+  "com.hotspot.streamdock.voicemod.action11": {
+    "Name": "Silenzia per Me On/Off",
+    "Tooltip": "Attiva o disattiva la modalità 'silenzia per me'"
+  },
+  "Localization": {
+    "选项": "Opzioni",
+    "音频选择": "Selezione Audio",
+    "请选择音频": "Seleziona un audio",
+    "插件状态": "Stato Plugin",
+    "正在连接 Voicemod": "Connessione a Voicemod in corso",
+    "连接成功 - 正在运行": "Connesso - In esecuzione",
+    "连接失败，正在尝试重连...": "Connessione fallita, tentativo di riconnessione...",
+    "随机语音": "Voce Casuale",
+    "点击切换": "Clicca per cambiare",
+    "操作按钮": "Pulsante Azione",
+    "音板选择": "Selezione Soundboard",
+    "请选择音板": "Seleziona una soundboard",
+    "使用缓存数据": "Usando dati dalla cache - Voicemod offline",
+    "缓存已清空": "Cache svuotata",
+    "重新加载音板": "Ricaricando soundboard...",
+    "音板数据已更新": "Dati soundboard aggiornati"
+  }
+}

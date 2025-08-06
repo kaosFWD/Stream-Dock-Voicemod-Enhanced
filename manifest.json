@@ -1,0 +1,203 @@
+{
+  "Actions": [
+    {
+      "Icon": "static/img/action-select-voice",
+      "Name": "Voice Changer Options",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-select-voice"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "Change voice changer sound type",
+      "UUID": "com.hotspot.streamdock.voicemod.action1",
+      "PropertyInspectorPath": "action1/index.html"
+    },
+    {
+      "Icon": "static/img/action-random-voice",
+      "Name": "Random Voice",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-random-voice-idle"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "Randomly select a voice",
+      "UUID": "com.hotspot.streamdock.voicemod.action2",
+      "PropertyInspectorPath": "action2/index.html"
+    },
+    {
+      "Icon": "static/img/action-voice-changer",
+      "Name": "Voice Changer On/Off",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-voice-changer-off"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "Click to turn voice changer on or off",
+      "UUID": "com.hotspot.streamdock.voicemod.action3",
+      "PropertyInspectorPath": "action3/index.html"
+    },
+    {
+      "Icon": "static/img/action-hear-my-voice",
+      "Name": "Hear My Voice On/Off",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-hear-my-voice-off"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "Click to turn hear my voice on or off",
+      "UUID": "com.hotspot.streamdock.voicemod.action4",
+      "PropertyInspectorPath": "action4/index.html"
+    },
+    {
+      "Icon": "static/img/action-ambient-sound",
+      "Name": "Background Effects On/Off",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-ambient-sound-off"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "Click to turn background effects on or off",
+      "UUID": "com.hotspot.streamdock.voicemod.action5",
+      "PropertyInspectorPath": "action5/index.html"
+    },
+    {
+      "Icon": "static/img/action-mute-sounds",
+      "Name": "Mute On/Off",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-mute-sounds-off"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "Click to turn mute on or off",
+      "UUID": "com.hotspot.streamdeck.voicemod.action6",
+      "PropertyInspectorPath": "action6/index.html"
+    },
+    {
+      "Icon": "static/img/action-push-bad-language",
+      "Name": "Instant Beep",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-push-bad-language-on-2"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "Press key to reproduce microphone checker beep sound",
+      "UUID": "com.hotspot.streamdock.voicemod.action7",
+      "PropertyInspectorPath": "action7/index.html"
+    },
+    {
+      "Icon": "static/img/action-push-voice-changer",
+      "Name": "Push-to-Voice Changer",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-voice-changer-on-1"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "Hold key to turn on voice changer, release to turn off",
+      "UUID": "com.hotspot.streamdock.voicemod.action8",
+      "PropertyInspectorPath": "action8/index.html"
+    },
+    {
+      "Icon": "static/img/action-add-sound",
+      "Name": "Soundboard Play",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-new-sound"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "This action plays soundboard audio files",
+      "UUID": "com.hotspot.streamdock.voicemod.action9",
+      "PropertyInspectorPath": "action9/index.html"
+    },
+    {
+      "Icon": "static/img/action-stop-all-sounds",
+      "Name": "Stop All Meme Playback",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-stop-all-sounds"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "This action will pause all playing memes",
+      "UUID": "com.hotspot.streamdock.voicemod.action10",
+      "PropertyInspectorPath": "action10/index.html"
+    },
+    {
+      "Icon": "static/img/action-mute-for-me",
+      "Name": "Mute For Me On/Off",
+      "States": [
+        {
+          "FontSize": "8",
+          "TitleAlignment": "middle",
+          "Image": "static/img/key-mute-for-me-idle"
+        }
+      ],
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Tooltip": "This action will toggle mute for me button state",
+      "UUID": "com.hotspot.streamdock.voicemod.action11",
+      "PropertyInspectorPath": "action11/index.html"
+    }
+  ],
+  "SDKVersion": 1,
+  "Author": "HotSpot",
+  "Name": "Voicemod",
+  "Icon": "static/img/category-voicemod-logo",
+  "CodePath": "plugin/index.html",
+  "Description": "Voicemod Control Plugin",
+  "Category": "Voicemod",
+  "CategoryIcon": "static/img/category-voicemod-logo",
+  "Version": "1.0.2",
+  "URL": "http://video.hotspotek.com.cn/",
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "7"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "2.9"
+  }
+}
