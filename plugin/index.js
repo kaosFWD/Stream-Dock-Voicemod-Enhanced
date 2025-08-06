@@ -579,8 +579,9 @@ let actionArr = [
                 voiceSend("getAllSoundboard");
             }
             
-            if (data.actionType === "getAllSoundboard") {
+          if (data.actionType === "getAllSoundboard") {
                 console.log('Soundboard ricevute:', data.actionObject.soundboards.length);
+                console.log('Struttura soundboard:', JSON.stringify(data.actionObject.soundboards[0], null, 2)); // Debug
                 this.usableBoards = data.actionObject.soundboards.filter(item => item.enabled);
                 
                 // *** NUOVO: Salva nella cache ***
@@ -619,22 +620,56 @@ let actionArr = [
             }
         },
         
-        keyUp(data) {
-            // Funziona solo se online o se abbiamo una selezione valida
-            if (voiceStatus && this.context_pool[data.context].active) {
-                console.log('Riproducendo soundboard:', this.context_pool[data.context].active);
+      keyUp(data) {
+            const settings = this.context_pool[data.context];
+            console.log('KeyUp - Settings attuali:', settings);
+            
+            // Controlla se Voicemod è online
+            if (!voiceStatus) {
+                console.log("Voicemod offline - impossibile riprodurre soundboard");
+                return;
+            }
+            
+            // Controlla se abbiamo una soundboard selezionata
+            if (!settings.active) {
+                console.log("Nessuna soundboard selezionata");
+                return;
+            }
+            
+            // Se abbiamo un suono specifico selezionato, usa quello
+            if (settings.selectedSound) {
+                console.log('Riproducendo suono specifico:', settings.selectedSound);
                 voiceSend("playMeme", {
-                    "FileName": this.context_pool[data.context].active,
+                    "FileName": settings.selectedSound,
                     "IsKeyDown": true
                 });
-            } else if (!voiceStatus) {
-                console.log("Voicemod offline - impossibile riprodurre soundboard");
             } else {
-                console.log("Nessuna soundboard selezionata");
+                // Prova diversi formati di comando
+                console.log('Tentativo 1: playMeme con FileName');
+                voiceSend("playMeme", {
+                    "FileName": settings.active,
+                    "IsKeyDown": true
+                });
+                
+                // Tentativo alternativo dopo un breve delay
+                setTimeout(() => {
+                    console.log('Tentativo 2: playSound');
+                    voiceSend("playSound", {
+                        "sound": settings.active
+                    });
+                }, 100);
+                
+                setTimeout(() => {
+                    console.log('Tentativo 3: formato diverso');
+                    voiceSend("playMeme", {
+                        "memeId": settings.active,
+                        "IsKeyDown": true
+                    });
+                }, 200);
             }
         }
     },
-    
+
     /* 停止所有模因 */
     [actionArr[9]]: {
         context_pool: {},
