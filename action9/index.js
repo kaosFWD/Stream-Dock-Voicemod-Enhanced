@@ -16,12 +16,15 @@ $SD.on('sendToPropertyInspector', e => {
     if (event === 'didReceiveSettings') {
         if (isload) {
             isload = false
+            // *** FIX: Richiedi soundboard dal plugin ***
             $SD.api.sendToPlugin(uuid, action, {
                 type: 'getSoundboards'
             })
         }
         settings = e.payload.settings
         let { voiceStatus, usableBoards, active, usingCache } = settings
+        
+        console.log('Settings ricevute:', settings); // Debug
         
         // *** NUOVO: Gestione della cache ***
         let statusMessage = '';
@@ -33,35 +36,63 @@ $SD.on('sendToPropertyInspector', e => {
             statusMessage = $localizedStrings['连接失败，正在尝试重连...'];
         }
         
-        // Costruisci l'HTML per le opzioni
-        let html = `<option value="">${$localizedStrings['请选择音板']}</option>`
-        
-        if (usableBoards && usableBoards.length > 0) {
-            usableBoards.forEach(item => {
-                html += `<option value="${item.id}">${item.name}</option>`
-            })
+        // *** FIX: Usa il selettore giusto ***
+        const selectBoard = document.getElementById('selectBoard');
+        if (selectBoard) {
+            // Costruisci l'HTML per le opzioni
+            let html = `<option value="">${$localizedStrings['请选择音板'] || 'Seleziona una soundboard'}</option>`
+            
+            if (usableBoards && usableBoards.length > 0) {
+                console.log(`Caricando ${usableBoards.length} soundboard nel menu`); // Debug
+                usableBoards.forEach(item => {
+                    html += `<option value="${item.id}">${item.name}</option>`
+                })
+            } else {
+                console.log('Nessuna soundboard disponibile'); // Debug
+            }
+            
+            selectBoard.innerHTML = html;
+            
+            /* 寻找是否存在之前选择的选项 否则恢复默认选择 */
+            if (usableBoards && usableBoards.length > 0) {
+                selectBoard.value = usableBoards.some(item => item.id === active) ? active : ''
+            } else {
+                selectBoard.value = ''
+            }
         }
         
-        $('#myselect').innerHTML = html
-        
-        /* 寻找是否存在之前选择的选项 否则恢复默认选择 */
-        if (usableBoards && usableBoards.length > 0) {
-            $('#myselect').value = usableBoards.some(item => item.id === active) ? active : ''
-        } else {
-            $('#myselect').value = ''
+        // *** FIX: Popola anche il menu audio (se necessario) ***
+        const selectVoice = document.getElementById('selectVoice');
+        if (selectVoice && active && usableBoards) {
+            const selectedBoard = usableBoards.find(board => board.id === active);
+            if (selectedBoard && selectedBoard.sounds) {
+                let voiceHtml = `<option value="">${$localizedStrings['请选择音频'] || 'Seleziona un audio'}</option>`;
+                selectedBoard.sounds.forEach(sound => {
+                    voiceHtml += `<option value="${sound.id}">${sound.name}</option>`;
+                });
+                selectVoice.innerHTML = voiceHtml;
+            } else {
+                selectVoice.innerHTML = `<option value="">${$localizedStrings['请选择音频'] || 'Seleziona un audio'}</option>`;
+            }
         }
         
         // Aggiorna il messaggio di stato
-        $('.lineCenter').innerHTML = statusMessage
+        const statusElement = document.querySelector('.lineCenter');
+        if (statusElement) {
+            statusElement.innerHTML = statusMessage;
+        }
         
         // *** NUOVO: Mostra indicatore cache se necessario ***
         updateCacheIndicator(usingCache, voiceStatus);
+        
+        // *** NUOVO: Aggiorna visibilità pulsanti ***
+        updateButtonVisibility(usingCache, voiceStatus);
     }
 })
 
 // *** NUOVO: Funzione per mostrare/nascondere indicatore cache ***
 function updateCacheIndicator(usingCache, voiceStatus) {
-    let cacheIndicator = $('#cacheIndicator');
+    let cacheIndicator = document.getElementById('cacheIndicator');
     
     if (!cacheIndicator) {
         // Crea l'indicatore se non esiste
@@ -69,12 +100,15 @@ function updateCacheIndicator(usingCache, voiceStatus) {
         cacheIndicator.id = 'cacheIndicator';
         cacheIndicator.style.cssText = `
             margin-top: 10px;
-            padding: 5px;
-            border-radius: 3px;
-            font-size: 12px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 11px;
             text-align: center;
         `;
-        $('.lineCenter').parentNode.insertBefore(cacheIndicator, $('.lineCenter').nextSibling);
+        const statusElement = document.querySelector('.lineCenter');
+        if (statusElement && statusElement.parentNode) {
+            statusElement.parentNode.insertBefore(cacheIndicator, statusElement.nextSibling);
+        }
     }
     
     if (usingCache && !voiceStatus) {
@@ -89,20 +123,21 @@ function updateCacheIndicator(usingCache, voiceStatus) {
 }
 
 // *** NUOVO: Pulsante per pulire la cache ***
-function addClearCacheButton() {
-    let clearButton = $('#clearCacheBtn');
+function createClearCacheButton() {
+    let clearButton = document.getElementById('clearCacheBtn');
     
     if (!clearButton) {
         clearButton = document.createElement('button');
         clearButton.id = 'clearCacheBtn';
         clearButton.innerHTML = '🗑️ Pulisci Cache';
+        clearButton.className = 'sdpi-item-value';
         clearButton.style.cssText = `
-            margin-top: 10px;
-            padding: 5px 10px;
+            margin-top: 8px;
+            padding: 6px 12px;
             background-color: #dc3545;
             color: white;
             border: none;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
             width: 100%;
@@ -116,48 +151,48 @@ function addClearCacheButton() {
                 });
                 
                 // Reset dell'interfaccia
-                $('#myselect').innerHTML = `<option value="">${$localizedStrings['请选择音板']}</option>`;
-                $('#myselect').value = '';
+                const selectBoard = document.getElementById('selectBoard');
+                const selectVoice = document.getElementById('selectVoice');
+                if (selectBoard) {
+                    selectBoard.innerHTML = `<option value="">${$localizedStrings['请选择音板'] || 'Seleziona una soundboard'}</option>`;
+                    selectBoard.value = '';
+                }
+                if (selectVoice) {
+                    selectVoice.innerHTML = `<option value="">${$localizedStrings['请选择音频'] || 'Seleziona un audio'}</option>`;
+                    selectVoice.value = '';
+                }
                 
                 // Nasconde l'indicatore cache
                 updateCacheIndicator(false, false);
             }
         });
         
-        // Aggiungi dopo l'indicatore cache
-        let cacheIndicator = $('#cacheIndicator');
-        if (cacheIndicator) {
-            cacheIndicator.parentNode.insertBefore(clearButton, cacheIndicator.nextSibling);
+        // Aggiungi al wrapper
+        const wrapper = document.querySelector('.sdpi-wrapper');
+        if (wrapper) {
+            wrapper.appendChild(clearButton);
         }
     }
     
-    // Mostra il pulsante solo se stiamo usando la cache
-    clearButton.style.display = settings && settings.usingCache ? 'block' : 'none';
+    return clearButton;
 }
 
-/* 切换音板选择 */
-$('#myselect').addEventListener('change', function () {
-    settings.active = this.value
-    console.log(context, settings);
-    
-    $SD.api.setSettings(context, settings)
-})
-
 // *** NUOVO: Pulsante per ricaricare manualmente ***
-function addRefreshButton() {
-    let refreshButton = $('#refreshBtn');
+function createRefreshButton() {
+    let refreshButton = document.getElementById('refreshBtn');
     
     if (!refreshButton) {
         refreshButton = document.createElement('button');
         refreshButton.id = 'refreshBtn';
         refreshButton.innerHTML = '🔄 Ricarica Soundboard';
+        refreshButton.className = 'sdpi-item-value';
         refreshButton.style.cssText = `
-            margin-top: 5px;
-            padding: 5px 10px;
+            margin-top: 8px;
+            padding: 6px 12px;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
             width: 100%;
@@ -174,22 +209,96 @@ function addRefreshButton() {
             setTimeout(() => {
                 this.innerHTML = '🔄 Ricarica Soundboard';
                 this.disabled = false;
-            }, 2000);
+            }, 3000);
         });
         
-        // Aggiungi prima del selettore
-        $('#myselect').parentNode.insertBefore(refreshButton, $('#myselect'));
+        // Aggiungi al wrapper
+        const wrapper = document.querySelector('.sdpi-wrapper');
+        if (wrapper) {
+            wrapper.appendChild(refreshButton);
+        }
+    }
+    
+    return refreshButton;
+}
+
+// *** NUOVO: Gestione visibilità pulsanti ***
+function updateButtonVisibility(usingCache, voiceStatus) {
+    const clearButton = document.getElementById('clearCacheBtn');
+    const refreshButton = document.getElementById('refreshBtn');
+    
+    if (clearButton) {
+        clearButton.style.display = usingCache ? 'block' : 'none';
+    }
+    
+    if (refreshButton) {
+        refreshButton.style.display = 'block'; // Sempre visibile
     }
 }
+
+/* *** FIX: Gestisci cambio soundboard *** */
+document.addEventListener('DOMContentLoaded', function() {
+    // Aggiungi listener per il cambio soundboard
+    const selectBoard = document.getElementById('selectBoard');
+    if (selectBoard) {
+        selectBoard.addEventListener('change', function() {
+            if (!settings) settings = {};
+            settings.active = this.value;
+            
+            console.log('Soundboard selezionata:', this.value); // Debug
+            
+            // Aggiorna il menu degli audio se la soundboard ha dei suoni
+            const selectVoice = document.getElementById('selectVoice');
+            if (selectVoice && settings.usableBoards) {
+                const selectedBoard = settings.usableBoards.find(board => board.id === this.value);
+                if (selectedBoard && selectedBoard.sounds) {
+                    let voiceHtml = `<option value="">${$localizedStrings['请选择音频'] || 'Seleziona un audio'}</option>`;
+                    selectedBoard.sounds.forEach(sound => {
+                        voiceHtml += `<option value="${sound.id}">${sound.name}</option>`;
+                    });
+                    selectVoice.innerHTML = voiceHtml;
+                } else {
+                    selectVoice.innerHTML = `<option value="">${$localizedStrings['请选择音频'] || 'Seleziona un audio'}</option>`;
+                }
+            }
+            
+            // Salva le impostazioni
+            $SD.api.setSettings(context, settings);
+        });
+    }
+    
+    // Aggiungi listener per il cambio audio
+    const selectVoice = document.getElementById('selectVoice');
+    if (selectVoice) {
+        selectVoice.addEventListener('change', function() {
+            if (!settings) settings = {};
+            settings.selectedSound = this.value;
+            
+            console.log('Audio selezionato:', this.value); // Debug
+            
+            // Salva le impostazioni
+            $SD.api.setSettings(context, settings);
+        });
+    }
+});
 
 // Inizializza i nuovi elementi quando la pagina è caricata
 document.addEventListener('DOMContentLoaded', function() {
     // Aggiungi i pulsanti dopo un breve delay per assicurarsi che gli elementi esistano
     setTimeout(() => {
-        addClearCacheButton();
-        addRefreshButton();
+        createClearCacheButton();
+        createRefreshButton();
+        updateButtonVisibility(settings?.usingCache, settings?.voiceStatus);
     }, 500);
 });
 
-// $SD.api.setSettings(payload.context, payload) // 保存设置
-// $SD.api.sendToPlugin(uuid, action, {})
+// *** NUOVO: Gestisci messaggi dal plugin ***
+$SD.on('sendToPropertyInspector', e => {
+    if (e.event === 'refreshComplete') {
+        const refreshButton = document.getElementById('refreshBtn');
+        if (refreshButton) {
+            refreshButton.innerHTML = '🔄 Ricarica Soundboard';
+            refreshButton.disabled = false;
+        }
+    }
+});

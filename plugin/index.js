@@ -411,6 +411,7 @@ let actionArr = [
         }
     },
     /* *** MIGLIORATO: 音板播放 con Cache Persistente *** */
+ /* *** AGGIORNATO: 音板播放 con Cache Persistente e gestione messaggi *** */
     [actionArr[8]]: {
         usableBoards: [],
         context_pool: {},
@@ -447,7 +448,71 @@ let actionArr = [
             }
         },
         
+        // *** NUOVO: Gestione messaggi dal Property Inspector ***
+        sendToPlugin(data) {
+            console.log('Messaggio ricevuto dal Property Inspector:', data.payload);
+            
+            switch(data.payload.type) {
+                case 'getSoundboards':
+                    // Richiedi soundboard se online, altrimenti carica dalla cache
+                    if (voiceSocket && voiceSocket.readyState === 1 && voiceStatus) {
+                        console.log('Richiedendo soundboard live...');
+                        voiceSend("getAllSoundboard");
+                    } else {
+                        console.log('Voicemod offline, caricando dalla cache...');
+                        const cachedBoards = CacheManager.loadCachedSoundboards(data.context);
+                        if (cachedBoards.length > 0) {
+                            $SD.setSettings(data.context, {
+                                voiceStatus: false,
+                                usableBoards: cachedBoards,
+                                active: this.context_pool[data.context]?.active || '',
+                                usingCache: true
+                            });
+                        } else {
+                            // Tenta di riconnettersi
+                            connect();
+                        }
+                    }
+                    break;
+                    
+                case 'refreshSoundboards':
+                    console.log('Ricaricamento soundboard richiesto...');
+                    if (voiceSocket && voiceSocket.readyState === 1) {
+                        voiceSend("getAllSoundboard");
+                    } else {
+                        console.log('Tentativo di riconnessione...');
+                        connect();
+                        // Dopo la connessione, le soundboard verranno ricaricate automaticamente
+                    }
+                    
+                    // Notifica al Property Inspector che il refresh è completato
+                    setTimeout(() => {
+                        $SD.sendToPropertyInspector(data.action, data.context, {
+                            event: 'refreshComplete'
+                        });
+                    }, 2000);
+                    break;
+                    
+                case 'clearCache':
+                    console.log('Pulizia cache richiesta...');
+                    // Rimuovi la cache da tutte le istanze
+                    for (let ctx in this.context_pool) {
+                        $SD.setSettings(ctx, {
+                            ...this.context_pool[ctx],
+                            cachedSoundboards: null,
+                            usableBoards: [],
+                            usingCache: false
+                        });
+                    }
+                    
+                    // Reset dei dati locali
+                    this.usableBoards = [];
+                    break;
+            }
+        },
+        
         willAppear(data) {
+            console.log('willAppear chiamato per soundboard');
             /* 恢复默认数据 */
             if (!this.context_pool[data.context]) this.context_pool[data.context] = {}
             
@@ -458,6 +523,7 @@ let actionArr = [
             
             /* 判断连接状态 */
             if (!voiceSocket || voiceSocket.readyState === 3) {
+                console.log('WebSocket non connesso, tentativo di connessione...');
                 // Se offline, carica dalla cache
                 const cachedBoards = CacheManager.loadCachedSoundboards(data.context);
                 if (cachedBoards.length > 0) {
@@ -468,25 +534,37 @@ let actionArr = [
                         active: this.context_pool[data.context].active || '',
                         usingCache: true
                     });
+                } else {
+                    console.log('Nessuna cache disponibile, impostazioni vuote');
+                    $SD.setSettings(data.context, {
+                        voiceStatus: false,
+                        usableBoards: [],
+                        active: '',
+                        usingCache: false
+                    });
                 }
                 connect();
             } else if (voiceSocket.readyState === 1) {
+                console.log('WebSocket connesso, richiedendo soundboard...');
                 voiceSend("getAllSoundboard");
             }
         },
         
         didReceiveSettings(data) {
+            console.log('didReceiveSettings per soundboard:', data.payload.settings);
             // Aggiorna il context_pool con tutte le impostazioni
             this.context_pool[data.context] = { ...data.payload.settings };
             
             if (data.payload.settings.active) {
                 // Se online, richiedi bitmap
                 if (voiceStatus && voiceSocket && voiceSocket.readyState === 1) {
+                    console.log('Richiedendo bitmap per:', data.payload.settings.active);
                     voiceSend("getBitmap", {
                         "memeId": data.payload.settings.active
                     }, data.context);
                 } else {
                     // Se offline, usa immagine predefinita
+                    console.log('Offline, usando immagine predefinita');
                     $SD.setImage(data.context, "../static/img/key-new-sound.png");
                 }
             } else {
@@ -496,9 +574,13 @@ let actionArr = [
         
         onmessage(data) {
             /* 获取并过滤好可用的音板发送给检查器 */
-            if (data.action === "registerClient") voiceSend("getAllSoundboard");
+            if (data.action === "registerClient") {
+                console.log('Client registrato, richiedendo soundboard...');
+                voiceSend("getAllSoundboard");
+            }
             
             if (data.actionType === "getAllSoundboard") {
+                console.log('Soundboard ricevute:', data.actionObject.soundboards.length);
                 this.usableBoards = data.actionObject.soundboards.filter(item => item.enabled);
                 
                 // *** NUOVO: Salva nella cache ***
@@ -506,6 +588,7 @@ let actionArr = [
                 CacheManager.saveSoundboards(this.usableBoards);
                 
                 for (let key in this.context_pool) {
+                    console.log(`Aggiornando impostazioni per context: ${key}`);
                     $SD.setSettings(key, {
                         voiceStatus,
                         usableBoards: this.usableBoards,
@@ -515,6 +598,7 @@ let actionArr = [
                     
                     // Richiedi bitmap se c'è una selezione attiva
                     if (this.context_pool[key].active) {
+                        console.log('Richiedendo bitmap per selezione attiva:', this.context_pool[key].active);
                         voiceSend("getBitmap", {
                             "memeId": this.context_pool[key].active
                         }, key);
@@ -524,10 +608,12 @@ let actionArr = [
             
             /* 获取图标 需要有模因id才切换 */
             if (data.actionType === "getBitmap" && data.actionObject.memeId) {
+                console.log('Bitmap ricevuta per:', data.actionObject.memeId);
                 let img = data.actionObject.result.default
                 if (img) {
                     $SD.setImage(data.actionID, "data:image/png;base64," + img)
                 } else {
+                    console.log('Nessuna immagine disponibile, usando placeholder');
                     $SD.setImage(data.actionID, "../static/img/noting.png")
                 }
             }
@@ -536,15 +622,19 @@ let actionArr = [
         keyUp(data) {
             // Funziona solo se online o se abbiamo una selezione valida
             if (voiceStatus && this.context_pool[data.context].active) {
+                console.log('Riproducendo soundboard:', this.context_pool[data.context].active);
                 voiceSend("playMeme", {
                     "FileName": this.context_pool[data.context].active,
                     "IsKeyDown": true
                 });
             } else if (!voiceStatus) {
                 console.log("Voicemod offline - impossibile riprodurre soundboard");
+            } else {
+                console.log("Nessuna soundboard selezionata");
             }
         }
     },
+    
     /* 停止所有模因 */
     [actionArr[9]]: {
         context_pool: {},
