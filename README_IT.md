@@ -55,7 +55,7 @@ Un plugin migliorato per Stream Dock/Stream Controller che si integra con Voicem
 
 1. **Scarica l'ultima versione**
    - Vai alla pagina [Releases](https://github.com/kaosFWD/Stream-Dock-Voicemod-Enhanced/releases)
-   - Scarica il file `Stream Dock Voicemod Enhanced v1.0.2 by kaosFWD.zip` dalla release più recente
+   - Scarica il file `Stream Dock Voicemod Enhanced v1.0.3 by kaosFWD.zip` dalla release più recente
 
 2. **Estrai il plugin**
    - Estrai il contenuto del file ZIP
