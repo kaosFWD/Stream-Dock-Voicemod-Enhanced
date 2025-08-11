@@ -62,8 +62,8 @@ An enhanced plugin for Stream Dock/Stream Controller that integrates with Voicem
    - You should get a folder named `com.hotspot.streamdock.voicemod.sdPlugin` or similar
 
 3. **Install in Stream Controller**
-   - Open File Explorer and navigate to `%APPDATA%\Stream Controller\Plugins\`
-     - On Windows: Press `Win + R`, type `%APPDATA%\Stream Controller\Plugins\` and press Enter
+   - Open File Explorer and navigate to `%APPDATA%\Hotspot\StreamDock\Plugins\`
+     - On Windows: Press `Win + R`, type `%APPDATA%\Hotspot\StreamDock\Plugins\` and press Enter
    - Copy the entire extracted plugin folder to this directory
    - Final structure should be:
      ```
@@ -89,7 +89,7 @@ An enhanced plugin for Stream Dock/Stream Controller that integrates with Voicem
    ```
 
 2. **Install the plugin**
-   - Copy the cloned folder to `%APPDATA%\Stream Controller\Plugins\`
+   - Copy the cloned folder to `%APPDATA%\Hotspot\StreamDock\Plugins\`
    - Restart Stream Controller
 
 ### Post-Installation
@@ -154,11 +154,11 @@ Stream-Dock-Voicemod-Enhanced/
 
 ### Plugin doesn't appear in Stream Controller
 1. **Check installation location**:
-   - Verify folder is in `%APPDATA%\Stream Controller\Plugins\`
+   - Verify folder is in `%APPDATA%\Hotspot\StreamDock\Plugins\`
    - Check that `manifest.json` is in the plugin's main folder
 2. **Completely restart Stream Controller**
 3. **Check logs**: Go to Stream Controller → Settings → Logging
-4. **What I did personally**: if still isn't showing, first download the voicemod plugin from the Stream Controller plugin store, then in `%APPDATA%\Stream Controller\Plugins\` folder, paste the whole content of the zip file and overwrite, restart Stream Controller.
+4. **What I did personally**: if still isn't showing, first download the voicemod plugin from the Stream Controller plugin store, then in `%APPDATA%\Hotspot\StreamDock\Plugins\` folder, paste the whole content of the zip file and overwrite, restart Stream Controller.
 
 ### Soundboards don't appear
 1. Verify Voicemod is running

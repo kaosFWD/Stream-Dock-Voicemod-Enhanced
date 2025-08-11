@@ -42,10 +42,51 @@ function remove(key) {
     saveSettings(data);
 }
 
+/**
+ * Unisce nuove impostazioni con quelle vecchie,
+ * proteggendo usableBoards, active e selectedSound
+ * da sovrascritture con valori vuoti/null.
+ */
+function mergeSettings(newData) {
+    const oldData = loadSettings();
+    const merged = { ...oldData, ...newData };
+
+    // Protezione usableBoards
+    if (
+        Array.isArray(newData.usableBoards) &&
+        newData.usableBoards.length === 0 &&
+        Array.isArray(oldData.usableBoards) &&
+        oldData.usableBoards.length > 0
+    ) {
+        merged.usableBoards = oldData.usableBoards;
+    }
+
+    // Protezione active
+    if (
+        (!newData.active || String(newData.active).trim() === '') &&
+        oldData.active &&
+        String(oldData.active).trim() !== ''
+    ) {
+        merged.active = oldData.active;
+    }
+
+    // Protezione selectedSound
+    if (
+        (!newData.selectedSound || String(newData.selectedSound).trim() === '') &&
+        oldData.selectedSound &&
+        String(oldData.selectedSound).trim() !== ''
+    ) {
+        merged.selectedSound = oldData.selectedSound;
+    }
+
+    saveSettings(merged);
+}
+
 module.exports = {
     loadSettings,
     saveSettings,
     get,
     set,
     remove,
+    mergeSettings,
 };

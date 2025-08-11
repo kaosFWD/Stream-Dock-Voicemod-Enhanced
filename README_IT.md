@@ -62,8 +62,8 @@ Un plugin migliorato per Stream Dock/Stream Controller che si integra con Voicem
    - Dovresti ottenere una cartella chiamata `com.hotspot.streamdock.voicemod.sdPlugin` o simile
 
 3. **Installa in Stream Controller**
-   - Apri Esplora File e vai a `%APPDATA%\Stream Controller\Plugins\`
-     - Su Windows: Premi `Win + R`, digita `%APPDATA%\Stream Controller\Plugins\` e premi Invio
+   - Apri Esplora File e vai a `%APPDATA%\Hotspot\StreamDock\Plugins\`
+     - Su Windows: Premi `Win + R`, digita `%APPDATA%\Hotspot\StreamDock\Plugins\` e premi Invio
    - Copia l'intera cartella del plugin estratta in questa directory
    - La struttura finale dovrebbe essere:
      ```
@@ -89,7 +89,7 @@ Un plugin migliorato per Stream Dock/Stream Controller che si integra con Voicem
    ```
 
 2. **Installa il plugin**
-   - Copia la cartella clonata in `%APPDATA%\Stream Controller\Plugins\`
+   - Copia la cartella clonata in `%APPDATA%\Hotspot\StreamDock\Plugins\`
    - Riavvia Stream Controller
 
 ### Post-Installazione
@@ -154,7 +154,7 @@ voicemod-stream-dock-plugin/
 
 ### Plugin non appare in Stream Controller
 1. **Verifica la posizione di installazione**:
-   - Controlla che la cartella sia in `%APPDATA%\Stream Controller\Plugins\`
+   - Controlla che la cartella sia in `%APPDATA%\Hotspot\StreamDock\Plugins\`
    - Verifica che il file `manifest.json` sia nella cartella principale del plugin
 2. **Riavvia completamente Stream Controller**
 3. **Controlla i log**: Vai su Stream Controller → Settings → Logging
